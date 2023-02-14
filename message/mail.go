@@ -1,6 +1,11 @@
 package message
 
-import "log"
+import (
+	"fmt"
+	"github.com/jordan-wright/email"
+	"log"
+	"net/smtp"
+)
 
 type Mail struct {
 	Host     string
@@ -14,5 +19,15 @@ type Mail struct {
 
 func (m *Mail) Send(body Body) {
 	log.Printf("[mail] sending message...")
-	log.Printf(body.Title + " " + body.Content)
+	e := email.NewEmail()
+	e.From = m.FromName
+	e.To = m.To
+	e.Subject = body.Title
+	e.Text = []byte(body.Content)
+	addr := fmt.Sprintf("%v:%v", m.Host, m.Port)
+	err := e.Send(addr, smtp.PlainAuth("", m.Username, m.Password, m.Host))
+	if err != nil {
+		log.Fatalf("[mail] send failed: %v\n", err)
+	}
+	log.Printf("[mail] send successful")
 }

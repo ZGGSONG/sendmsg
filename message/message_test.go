@@ -15,8 +15,8 @@ func TestSend(t *testing.T) {
 	global.GLO_CONF = conf
 
 	m := GetType()
-	if !Enabled() {
-		return
+	if !Enabled() || m == nil {
+		t.Fatalf("[test] Failed to get type...")
 	}
 	m.Send(Body{
 		Title:   "Hello",
