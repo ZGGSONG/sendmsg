@@ -5,11 +5,13 @@ import (
 	"sendmsg/message"
 )
 
-type Support struct{}
+type Service struct {
+	Body message.Body
+}
 
-func (s Support) Run() {
-	log.Printf("[support] start excute...")
-
+func (s Service) Run() {
+	log.Printf("[service] start excute...")
+	send(s.Body)
 }
 
 func send(body message.Body) {

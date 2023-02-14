@@ -5,6 +5,7 @@ import (
 	"sendmsg/config"
 	"sendmsg/global"
 	"testing"
+	"time"
 )
 
 func TestSend(t *testing.T) {
@@ -20,6 +21,6 @@ func TestSend(t *testing.T) {
 	}
 	m.Send(Body{
 		Title:   "Hello",
-		Content: "World",
+		Content: "World " + time.Now().Format("2006-01-02 15:04:05"),
 	})
 }
