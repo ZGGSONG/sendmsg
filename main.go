@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"sendmsg/common"
 	"sendmsg/global"
 	"sendmsg/message"
@@ -18,7 +17,7 @@ func init() {
 	global.GLO_CONF_CH = make(chan model.Config)
 	_conf, err := common.InitConfig()
 	if err != nil {
-		log.Fatalf("[init] Failed to initialize config: %v", err)
+		common.Log.Fatalf("[init] Failed to initialize config: %v", err)
 	}
 	global.GLO_CONF = _conf
 }

@@ -3,8 +3,8 @@ package message
 import (
 	"bytes"
 	"encoding/json"
-	"log"
 	"net/http"
+	"sendmsg/common"
 	"sendmsg/model"
 )
 
@@ -14,7 +14,7 @@ type Bark struct {
 }
 
 func (b *Bark) Send(body Body) {
-	log.Printf("[bark] sending message...")
+	common.Log.Printf("[bark] sending message...")
 	var reqBody = model.BarkRequest{
 		DeviceKey: b.key,
 		Title:     body.Title,
@@ -25,9 +25,9 @@ func (b *Bark) Send(body Body) {
 		"application/json; charset=utf-8",
 		bytes.NewReader(req))
 	if err != nil {
-		log.Fatalf("[bark] http post failed: %v\n", err)
+		common.Log.Fatalf("[bark] http post failed: %v\n", err)
 	}
 	defer resp.Body.Close()
 
-	log.Printf("[bark] Send successful")
+	common.Log.Printf("[bark] Send successful")
 }

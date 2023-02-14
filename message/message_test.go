@@ -1,7 +1,6 @@
 package message
 
 import (
-	"log"
 	"sendmsg/common"
 	"sendmsg/global"
 	"testing"
@@ -11,7 +10,7 @@ import (
 func TestSend(t *testing.T) {
 	conf, err := common.InitConfig()
 	if err != nil {
-		log.Println("[test] Failed to initialize config: ", err)
+		common.Log.Println("[test] Failed to initialize config: ", err)
 	}
 	global.GLO_CONF = conf
 
