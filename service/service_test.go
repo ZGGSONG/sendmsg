@@ -1,7 +1,7 @@
 package service
 
 import (
-	"sendmsg/config"
+	"sendmsg/common"
 	"sendmsg/global"
 	"sendmsg/message"
 	"testing"
@@ -9,7 +9,7 @@ import (
 )
 
 func TestService(t *testing.T) {
-	conf, err := config.InitConfig()
+	conf, err := common.InitConfig()
 	if err != nil {
 		t.Fatalf("Failed to initialize config: %v", err)
 	}

@@ -2,14 +2,14 @@ package message
 
 import (
 	"log"
-	"sendmsg/config"
+	"sendmsg/common"
 	"sendmsg/global"
 	"testing"
 	"time"
 )
 
 func TestSend(t *testing.T) {
-	conf, err := config.InitConfig()
+	conf, err := common.InitConfig()
 	if err != nil {
 		log.Println("[test] Failed to initialize config: ", err)
 	}
