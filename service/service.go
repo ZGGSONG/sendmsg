@@ -1,7 +1,7 @@
 package service
 
 import (
-	"sendmsg/common"
+	log "github.com/sirupsen/logrus"
 	"sendmsg/message"
 )
 
@@ -10,7 +10,7 @@ type Service struct {
 }
 
 func (s Service) Run() {
-	common.Log.Printf("[service] start excute...")
+	log.Printf("[service] start excute...")
 	send(s.Body)
 }
 

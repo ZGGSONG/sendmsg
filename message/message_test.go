@@ -1,6 +1,7 @@
 package message
 
 import (
+	log "github.com/sirupsen/logrus"
 	"sendmsg/common"
 	"sendmsg/global"
 	"testing"
@@ -10,7 +11,7 @@ import (
 func TestSend(t *testing.T) {
 	conf, err := common.InitConfig()
 	if err != nil {
-		common.Log.Println("[test] Failed to initialize config: ", err)
+		log.Println("[test] Failed to initialize config: ", err)
 	}
 	global.GLO_CONF = conf
 

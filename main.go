@@ -1,6 +1,7 @@
 package main
 
 import (
+	log "github.com/sirupsen/logrus"
 	"sendmsg/common"
 	"sendmsg/global"
 	"sendmsg/message"
@@ -11,13 +12,13 @@ import (
 
 func init() {
 	/*日志初始化*/
-	common.InitLog()
+	common.InitLog2()
 
 	/*配置初始化*/
 	global.GLO_CONF_CH = make(chan model.Config)
 	_conf, err := common.InitConfig()
 	if err != nil {
-		common.Log.Fatalf("[init] Failed to initialize config: %v", err)
+		log.Fatalf("[init] Failed to initialize config: %v", err)
 	}
 	global.GLO_CONF = _conf
 }

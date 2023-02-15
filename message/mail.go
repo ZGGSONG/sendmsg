@@ -3,8 +3,8 @@ package message
 import (
 	"fmt"
 	"github.com/jordan-wright/email"
+	log "github.com/sirupsen/logrus"
 	"net/smtp"
-	"sendmsg/common"
 )
 
 type Mail struct {
@@ -18,7 +18,7 @@ type Mail struct {
 }
 
 func (m *Mail) Send(body Body) {
-	common.Log.Printf("[mail] sending message...")
+	log.Printf("[mail] sending message...")
 	e := email.NewEmail()
 	e.From = m.FromName
 	e.To = m.To
@@ -27,7 +27,7 @@ func (m *Mail) Send(body Body) {
 	addr := fmt.Sprintf("%v:%v", m.Host, m.Port)
 	err := e.Send(addr, smtp.PlainAuth("", m.Username, m.Password, m.Host))
 	if err != nil {
-		common.Log.Fatalf("[mail] send failed: %v\n", err)
+		log.Fatalf("[mail] send failed: %v\n", err)
 	}
-	common.Log.Printf("[mail] send successful")
+	log.Printf("[mail] send successful")
 }

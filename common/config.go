@@ -2,6 +2,7 @@ package common
 
 import (
 	"github.com/fsnotify/fsnotify"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"os"
 	"sendmsg/global"
@@ -20,7 +21,7 @@ func InitConfig() (model.Config, error) {
 	viper.AddConfigPath("../config")
 	viper.AddConfigPath(workDir + "/config")
 	viper.OnConfigChange(func(e fsnotify.Event) {
-		Log.Printf("[conf] config update: %v\n", e.Name)
+		log.Printf("[conf] config update: %v\n", e.Name)
 		global.GLO_CONF_CH <- updateConfig()
 	})
 	viper.WatchConfig()
