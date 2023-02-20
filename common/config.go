@@ -2,7 +2,6 @@ package common
 
 import (
 	"github.com/fsnotify/fsnotify"
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"os"
 	"sendmsg/global"
@@ -15,13 +14,18 @@ import (
 //	@return model.Config
 //	@return error
 func InitConfig() (model.Config, error) {
+	// 初始化channel
+	global.GLO_CONF_CH = make(chan model.Config)
+
 	workDir, _ := os.Getwd()
 	viper.SetConfigName("config")
 	viper.SetConfigType("yml")
+	viper.AddConfigPath(".")
 	viper.AddConfigPath("../config")
+	viper.AddConfigPath("../../config")
+	viper.AddConfigPath("../../../config")
 	viper.AddConfigPath(workDir + "/config")
 	viper.OnConfigChange(func(e fsnotify.Event) {
-		log.Printf("[conf] config update: %v\n", e.Name)
 		global.GLO_CONF_CH <- updateConfig()
 	})
 	viper.WatchConfig()

@@ -5,7 +5,6 @@ import (
 	"sendmsg/common"
 	"sendmsg/global"
 	"sendmsg/message"
-	"sendmsg/model"
 	"sendmsg/service"
 	"time"
 )
@@ -15,33 +14,29 @@ func init() {
 	common.InitLog2()
 
 	/*配置初始化*/
-	global.GLO_CONF_CH = make(chan model.Config)
-	_conf, err := common.InitConfig()
+	conf, err := common.InitConfig()
 	if err != nil {
-		log.Fatalf("[init] Failed to initialize config: %v", err)
+		log.Fatalf("failed to initialize config: %v", err)
 	}
-	global.GLO_CONF = _conf
+	global.GLO_CONF = conf
+
 }
 func main() {
-	//test
-	go func() {
-		var count int
-		for {
-			if count > 1 {
-				return
-			}
-			count++
-			var s = service.Service{Body: message.Body{
-				Title:   "test title",
-				Content: "this is content, time is " + time.Now().Format("2006-01-02 15:04:05"),
-			}}
-			s.Run()
-			time.Sleep(time.Second * 3)
-		}
-	}()
+	/*测试发送*/
+	var s = service.Service{Body: message.Body{
+		Title:   "test title",
+		Content: "this is content, time is " + time.Now().Format("2006-01-02 15:04:05"),
+	}}
+	if err := s.Run(); err != nil {
+		log.Fatalf("failed to send message: %v", err)
+	} else {
+		log.Printf("send message successfully...")
+	}
 
+	/*监听配置*/
 	for {
 		_conf := <-global.GLO_CONF_CH
+		log.Printf("config changed: %v", _conf)
 		global.GLO_CONF = _conf
 	}
 }

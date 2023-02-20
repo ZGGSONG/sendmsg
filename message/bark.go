@@ -3,7 +3,9 @@ package message
 import (
 	"bytes"
 	"encoding/json"
-	log "github.com/sirupsen/logrus"
+	"errors"
+	"fmt"
+	"io"
 	"net/http"
 	"sendmsg/model"
 )
@@ -13,8 +15,7 @@ type Bark struct {
 	key string
 }
 
-func (b *Bark) Send(body Body) {
-	log.Printf("[bark] sending message...")
+func (b *Bark) Send(body Body) error {
 	var reqBody = model.BarkRequest{
 		DeviceKey: b.key,
 		Title:     body.Title,
@@ -25,9 +26,23 @@ func (b *Bark) Send(body Body) {
 		"application/json; charset=utf-8",
 		bytes.NewReader(req))
 	if err != nil {
-		log.Fatalf("[bark] http post failed: %v\n", err)
+		return errors.New(fmt.Sprintf("bark http post failed: %v", err))
 	}
 	defer resp.Body.Close()
 
-	log.Printf("[bark] Send successful")
+	r, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return errors.New(fmt.Sprintf("bark read resp body failed, %v", err))
+	}
+
+	var response model.BarkResponse
+	if err = json.Unmarshal(r, &response); err != nil {
+		return errors.New(fmt.Sprintf("bark json unmarshal failed, %v", err))
+	}
+
+	if response.Code != 200 {
+		return errors.New("bar send failed")
+	}
+	//log.Printf("[bark] send successful")
+	return nil
 }

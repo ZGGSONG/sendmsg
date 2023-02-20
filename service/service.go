@@ -1,7 +1,7 @@
 package service
 
 import (
-	log "github.com/sirupsen/logrus"
+	"errors"
 	"sendmsg/message"
 )
 
@@ -9,15 +9,20 @@ type Service struct {
 	Body message.Body
 }
 
-func (s Service) Run() {
-	log.Printf("[service] start excute...")
-	send(s.Body)
+func (s Service) Run() error {
+	return send(s.Body)
 }
 
-func send(body message.Body) {
-	m := message.GetType()
-	if m == nil || !message.Enabled() {
-		return
+func send(body message.Body) error {
+	m, err := message.GetType()
+	if err != nil {
+		return err
 	}
-	m.Send(body)
+	if !message.Enabled() {
+		return errors.New("config set message not enabled")
+	}
+	if err := m.Send(body); err != nil {
+		return err
+	}
+	return nil
 }
